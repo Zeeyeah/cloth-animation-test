@@ -47,7 +47,7 @@ export class Gl {
 		this.camera.position.set(0, 0, 5);
 
 		this.scene = new Scene();
-		this.scene.background = new Color(globalStore.getState().fogColor);
+		// this.scene.background = new Color(globalStore.getState().fogColor);
 		this.scene.fog = new FogExp2(
 			globalStore.getState().fogColor,
 			globalStore.getState().fogDensity
@@ -62,7 +62,7 @@ export class Gl {
 		});
 
 		this.setupRenderer();
-		this.setupStats();
+		// this.setupStats();
 
 		globalStore.subscribe((store) => {
 			this.scene.background = new Color(store.fogColor);
@@ -100,16 +100,16 @@ export class Gl {
 		this.scene.frustumCulled = true;
 	}
 
-	private setupStats() {
-		this.stats.minimal = false;
-		this.stats.init(this.renderer);
-		// this.stats.dom.style.bottom = "0";
-		// this.stats.dom.style.top = "auto";
-		// this.stats.dom.style.left = "auto";
-		// this.stats.dom.style.right = "0";
-		this.stats.dom.style.display = 'block';
-		document.body.appendChild(this.stats.dom);
-	}
+	// private setupStats() {
+	// 	this.stats.minimal = false;
+	// 	this.stats.init(this.renderer);
+	// 	// this.stats.dom.style.bottom = "0";
+	// 	// this.stats.dom.style.top = "auto";
+	// 	// this.stats.dom.style.left = "auto";
+	// 	// this.stats.dom.style.right = "0";
+	// 	this.stats.dom.style.display = 'block';
+	// 	document.body.appendChild(this.stats.dom);
+	// }
 	public resize(width: number, height: number, dpr: number = 2) {
 		this.camera.aspect = width / height;
 		this.camera.updateProjectionMatrix();

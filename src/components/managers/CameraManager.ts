@@ -26,11 +26,11 @@ export class CameraManager {
 	}
 
 	private setupOrbitControls() {
-		this.orbitControls.enablePan = true;
+		this.orbitControls.enablePan = false;
 		this.orbitControls.target.set(0, 0, 0);
 		// this.orbitControls.enableDamping = true;
 		// this.orbitControls.dampingFactor = 0.05;
-		this.orbitControls.enableZoom = true;
+		// this.orbitControls.enableZoom = true;
 		this.orbitControls.enableRotate = true;
 		// this.orbitControls.autoRotate = true;
 		// this.orbitControls.autoRotateSpeed = -0.5;
@@ -38,6 +38,16 @@ export class CameraManager {
 		// this.orbitControls.minPolarAngle = (30 * Math.PI) / 180;
 		// this.orbitControls.minDistance = 2;
 		// this.orbitControls.maxDistance = 5;
+	}
+
+	public disableOrbitControls() {
+		this.orbitControls.enabled = false;
+		console.log('Orbit controls disabled');
+	}
+
+	public enableOrbitControls() {
+		this.orbitControls.enabled = true;
+		console.log('Orbit controls enabled');
 	}
 
 	private setupClickListener() {

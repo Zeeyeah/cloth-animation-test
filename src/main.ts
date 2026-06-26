@@ -3,7 +3,6 @@ import { emitter } from '@/utils/emitter';
 import { globalStore } from '@/store/store';
 
 import { Cube } from '@/components/Cube';
-import { FireFlies } from '@/components/FireFly';
 import { CameraManager } from './components/managers/CameraManager';
 import { AirCar } from './components/AirCar/AirCar';
 import { LoadingHandler } from './utils/LoadingHandler';
@@ -14,6 +13,10 @@ import AudioManager from './utils/AudioManager';
 
 import { BlendFunction, ToneMappingMode } from 'postprocessing';
 import { VertexColorTest } from './components/VertexColorTest';
+import { Bike } from './components/Bike/Bike';
+import { GeometrySlicer } from './components/GeometrySlicer/GeometrySlicer';
+import { UIManager } from './ui/UIManager';
+import { CutManager } from './components/GeometrySlicer/CutManager';
 
 
 type AppProps = {
@@ -34,16 +37,18 @@ export class App {
 		new LoadingHandler();
 
 		this.postManager = new PostManager();
-		this.postManager.createBloomEffect({
-			luminanceSmoothing: 1
-		});
-		this.postManager.createVignetteEffect();
-		this.postManager.createSMAAEffect();
-		this.postManager.createN8AOPostPass();
-		// this.postManager.createColorGradingEffects();
-		this.postManager.createToneMappingEffect({
-			mode: ToneMappingMode.ACES_FILMIC
-		});
+		// this.postManager.createBloomEffect({
+		// 	luminanceSmoothing: 1,
+		// 	intensity: 0.3,
+		// 	radius: 0.12
+		// });
+		// this.postManager.createVignetteEffect();
+		// this.postManager.createSMAAEffect();
+		// this.postManager.createN8AOPostPass();
+		// // this.postManager.createColorGradingEffects();
+		// this.postManager.createToneMappingEffect({
+		// 	mode: ToneMappingMode.ACES_FILMIC
+		// });
 
 		this.init();
 		this.setupEventListeners();
@@ -57,7 +62,12 @@ export class App {
 		// camMan.camera.position.set(500, 150, 0);
 		// camMan.orbitControls.target.set(0, 150, 0);
 
-		new Cube();
+		// new Cube();
+		// new Bike()
+		// new AirCar();
+		// new GeometrySlicer();
+		new UIManager(new GeometrySlicer(), new CutManager(camMan));
+
 
 		this.audioManager = new AudioManager();
 		this.audioManager.loadSound('background', 'audio/music.mp3', 0.1, true);
@@ -96,12 +106,12 @@ export class App {
 			this.gl.resize(window.innerWidth, window.innerHeight);
 			emitter.emit('resize', window.innerWidth, window.innerHeight);
 		});
-		window.addEventListener('click', (e) => {
-			emitter.emit('click', e.clientX, e.clientY);
+		// window.addEventListener('click', (e) => {
+		// 	emitter.emit('click', e.clientX, e.clientY);
 
-			// this.audioManager.playSound('background');
-			console.log(this.gl.renderer.info.render);
-		});
+		// 	// this.audioManager.playSound('background');
+		// 	console.log(this.gl.renderer.info.render);
+		// });
 	}
 }
 
