@@ -17,6 +17,7 @@ import { Bike } from './components/Bike/Bike';
 import { GeometrySlicer } from './components/GeometrySlicer/GeometrySlicer';
 import { UIManager } from './ui/UIManager';
 import { CutManager } from './components/GeometrySlicer/CutManager';
+import SolarSystem from './components/KiranJewels/KiranJewels';
 
 
 type AppProps = {
@@ -37,15 +38,15 @@ export class App {
 		new LoadingHandler();
 
 		this.postManager = new PostManager();
-		// this.postManager.createBloomEffect({
-		// 	luminanceSmoothing: 1,
-		// 	intensity: 0.3,
-		// 	radius: 0.12
-		// });
-		// this.postManager.createVignetteEffect();
+		this.postManager.createBloomEffect({
+			luminanceSmoothing: 1,
+			intensity: 1.5,
+			radius: 0.12
+		});
+		this.postManager.createVignetteEffect();
 		// this.postManager.createSMAAEffect();
 		// this.postManager.createN8AOPostPass();
-		// // this.postManager.createColorGradingEffects();
+		// this.postManager.createColorGradingEffects();
 		// this.postManager.createToneMappingEffect({
 		// 	mode: ToneMappingMode.ACES_FILMIC
 		// });
@@ -57,8 +58,9 @@ export class App {
 	}
 
 	private init() {
-		const lights = new LightingManager();
+		// const lights = new LightingManager();
 		const camMan = new CameraManager();
+		globalStore.setState({ fogColor: '#020128', fogDensity: 0.015 });
 		// camMan.camera.position.set(500, 150, 0);
 		// camMan.orbitControls.target.set(0, 150, 0);
 
@@ -66,7 +68,8 @@ export class App {
 		// new Bike()
 		// new AirCar();
 		// new GeometrySlicer();
-		new UIManager(new GeometrySlicer(), new CutManager(camMan));
+		// new UIManager(new GeometrySlicer(), new CutManager(camMan));
+		new SolarSystem();
 
 
 		this.audioManager = new AudioManager();

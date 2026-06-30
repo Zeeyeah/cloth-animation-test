@@ -20,20 +20,21 @@ export class UIManager {
 		const cards = document.querySelectorAll('.model-card');
 		const startBtn = document.querySelector('.start-button')!;
 
-		const fileInput = document.querySelector('.import-model input') as HTMLInputElement;
+		const menuFileInput = document.querySelector('#menu-model-upload') as HTMLInputElement;
+		const topModelSelect = document.querySelector('#top-model-select') as HTMLSelectElement;
+		const topFileInput = document.querySelector('#top-model-upload') as HTMLInputElement;
 		const dropzone = document.querySelector('.dropzone') as HTMLElement;
 
 		const uploadTitle = document.querySelector('.upload-title')!;
-
 		const uploadSubtitle = document.querySelector('.upload-subtitle')!;
 
-		cards.forEach((card, index) => {
+		cards.forEach((card) => {
 			card.addEventListener('click', () => {
 				cards.forEach((c) => c.classList.remove('active'));
 
 				card.classList.add('active');
 
-				this.selectedModel = `model-${index}`;
+				this.selectedModel = card.getAttribute('data-model-id');
 				this.uploadedFile = null;
 
 				uploadTitle.textContent = 'Drag & Drop GLTF/GLB';
@@ -70,13 +71,7 @@ export class UIManager {
 			this.updateStartButton();
 		});
 
-		fileInput.addEventListener('change', (e) => {
-			const target = e.target as HTMLInputElement;
-
-			if (!target.files?.length) return;
-
-			const file = target.files[0];
-
+		const updateMenuUploadState = (file: File) => {
 			this.uploadedFile = file;
 			this.selectedModel = null;
 
@@ -84,8 +79,45 @@ export class UIManager {
 
 			uploadTitle.textContent = file.name;
 			uploadSubtitle.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
-
 			this.updateStartButton();
+		};
+
+		menuFileInput.addEventListener('change', (e) => {
+			const target = e.target as HTMLInputElement;
+
+			if (!target.files?.length) return;
+
+			updateMenuUploadState(target.files[0]);
+		});
+
+		dropzone.addEventListener('drop', (e) => {
+			e.preventDefault();
+
+			const file = e.dataTransfer?.files[0];
+
+			if (!file) return;
+
+			updateMenuUploadState(file);
+			dropzone.classList.remove('drag-over');
+		});
+
+		topModelSelect?.addEventListener('change', (event) => {
+			const value = (event.target as HTMLSelectElement).value;
+
+			if (!value) return;
+
+			this.selectedModel = value;
+			this.uploadedFile = null;
+			this.slicer.loadDefaultModel(value);
+		});
+
+		topFileInput?.addEventListener('change', (event) => {
+			const target = event.target as HTMLInputElement;
+			if (!target.files?.length) return;
+
+			this.uploadedFile = target.files[0];
+			this.selectedModel = null;
+			this.slicer.loadUploadedModel(this.uploadedFile);
 		});
 
 		startBtn.addEventListener('click', () => {

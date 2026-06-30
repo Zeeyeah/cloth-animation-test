@@ -230,31 +230,23 @@ export class CutManager {
         }
     }
 
-    /**
-     * Update mesh position while dragging
-     */
     private updateMeshDrag(event: MouseEvent) {
         if (!this.draggedMesh || !this.dragPlane) return;
 
-        // Get new mouse position
         const rect = this.gl.canvas.getBoundingClientRect();
         const mousePos = new THREE.Vector2(
             ((event.clientX - rect.left) / rect.width) * 2 - 1,
             -(((event.clientY - rect.top) / rect.height) * 2 - 1)
         );
 
-        // Cast ray and intersect with drag plane
         this.raycaster.setFromCamera(mousePos, this.gl.camera);
         const newWorldPos = new THREE.Vector3();
         this.raycaster.ray.intersectPlane(this.dragPlane, newWorldPos);
 
-        // Update mesh position with offset
         this.draggedMesh.position.addVectors(newWorldPos, this.dragOffset);
     }
 
-    /**
-     * Stop dragging
-     */
+
     private stopMeshDrag() {
         if (!this.draggedMesh) return;
 
@@ -275,9 +267,7 @@ export class CutManager {
         }
     }
 
-    /**
-     * Get all draggable meshes in the scene
-     */
+
     private getAllMeshes(): THREE.Mesh[] {
         const meshes: THREE.Mesh[] = [];
 
@@ -297,9 +287,7 @@ export class CutManager {
         return meshes;
     }
 
-    /**
-     * Converts 2D screen coordinates to 3D world space using raycasting
-     */
+
     private screenToWorld(screenPos: THREE.Vector2): THREE.Vector3 | null {
         const ndc = new THREE.Vector2(
             (screenPos.x / window.innerWidth) * 2 - 1,
@@ -324,9 +312,6 @@ export class CutManager {
         return intersection;
     }
 
-    /**
-     * Generates a 3D cutting plane from 2D screen drag
-     */
     private generatePlane(): THREE.Plane | null {
         const dragDistance = this.start.distanceTo(this.end);
 
@@ -370,9 +355,6 @@ export class CutManager {
         return plane;
     }
 
-    /**
-     * Updates the visual preview of the cutting plane
-     */
     private updatePlanePreview() {
         const plane = this.generatePlane();
 
@@ -387,9 +369,6 @@ export class CutManager {
         this.gl.scene.add(this.planeHelper);
     }
 
-    /**
-     * Clears the plane preview visualization
-     */
     private clearPlanePreview() {
         if (this.planeHelper) {
             this.gl.scene.remove(this.planeHelper);
@@ -427,9 +406,6 @@ export class CutManager {
         }
     }
 
-    /**
-     * Separates the cut pieces along the plane normal for visualization
-     */
     private separatePieces(plane: THREE.Plane, distance: number) {
         const offset = new THREE.Vector3().copy(plane.normal).multiplyScalar(distance);
         const negOffset = offset.clone().multiplyScalar(-1);
@@ -443,9 +419,6 @@ export class CutManager {
         }
     }
 
-    /**
-     * Finds a mesh in the scene to cut
-     */
     private findMeshToCut(): THREE.Mesh | null {
         let meshToCut: THREE.Mesh | null = null;
 
@@ -462,43 +435,6 @@ export class CutManager {
         return meshToCut;
     }
 
-    /**
-     * Called when a cut is completed
-     */
 
-    /**
-     * Gets the last plane for debugging
-     */
-    public getLastPlane(): THREE.Plane | null {
-        return this.lastPlane;
-    }
 
-    /**
-     * Gets the current front piece
-     */
-    public getFrontPiece(): THREE.Mesh | null {
-        return this.frontPiece;
-    }
-
-    /**
-     * Gets the current back piece
-     */
-    public getBackPiece(): THREE.Mesh | null {
-        return this.backPiece;
-    }
-
-    /**
-     * Undo the last cut
-     */
-    public undoLastCut() {
-        if (this.frontPiece) {
-            this.gl.scene.remove(this.frontPiece);
-            this.frontPiece = null;
-        }
-
-        if (this.backPiece) {
-            this.gl.scene.remove(this.backPiece);
-            this.backPiece = null;
-        }
-    }
 }
